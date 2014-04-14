@@ -21,13 +21,13 @@ INTEGER {HEXA_INTEGER}|{DEC_INTEGER}
 <COMMENT>[.]* {}
 <COMMENT>"*/" {BEGIN INITIAL;printf("\n");}
 
-MASK {return tMASK;}
-EQU {return tEQU;}
-INF {return tINF;}
-INT {return tINT;}
-MLOAD {return tMLOAD;}
-LOAD {return tLOAD;}
-JMP {return tJMP;}
+(MASK|mask) {return tMASK;}
+(EQU|equ) {return tEQU;}
+(INF|inf) {return tINF;}
+(INT|int) {return tINT;}
+(MLOAD|mload) {return tMLOAD;}
+(LOAD|load) {return tLOAD;}
+(JMP|jmp) {return tJMP;}
 
 {INTEGER} {yylval.integer = atoi(yytext); return tINTEGER;}
 {WORD} {yylval.string = strdup(yytext); return tWORD;}
