@@ -4,7 +4,8 @@ d               := $(dir)
 
 TARGET					:= $(call SRC_2_BIN, $(d)/mpu_assembler.elf)
 TARGETS 				+= $(TARGET)
-OBJS_$(d)				:= $(call SRC_2_OBJ, $(d)/main.o $(d)/lexer.o $(d)/parser.o)
+OBJS_$(d)				:= $(call SRC_2_OBJ, $(d)/main.o $(d)/lexer.o $(d)/parser.o \
+	$(d)/sem.o)
 
 # Extra dependencies
 $(call SRC_2_OBJ, $(d)/main.o): $(call SRC_2_OBJ, $(d)/lexer.o) 
