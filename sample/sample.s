@@ -1,5 +1,5 @@
 maskb r1, r1_0, r1, r1_7
-maskw r1, r1_1, r1, r1_3
+maskw r1, r1_1, r1, r31_3
 maskd r1, r1_0, r1, r1_1
 jmpw r1
 mloadq r1

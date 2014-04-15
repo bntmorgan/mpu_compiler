@@ -30,25 +30,25 @@ instructions  : instruction instructions;
               | ;
 
 instruction : tMASK  size reg tC reg tC reg tC reg {
-  sem_mask($2, $3, $5, $7, $9);
+  sem_mask($2, &$3, &$5, &$7, &$9);
 }
             | tEQU   size reg tC reg tC reg tC reg {
-  sem_equ($2, $3, $5, $7, $9);
+  sem_equ($2, &$3, &$5, &$7, &$9);
 }
             | tINF   size reg tC reg tC reg {
-  sem_inf($2, $3, $5, $7);
+  sem_inf($2, &$3, &$5, &$7);
 }
             | tINT   size reg {
-  sem_int($2, $3);
+  sem_int($2, &$3);
 }
             | tMLOAD size reg {
-  sem_mload($2, $3);
+  sem_mload($2, &$3);
 }
             | tLOAD  size reg tC tINTEGER {
-  sem_load($2, $3, $5);
+  sem_load($2, &$3, $5);
 }
             | tJMP   size reg {
-  sem_jmp($2, $3);
+  sem_jmp($2, &$3);
 }
 
 size  : tB {$$ = BYTE;}
