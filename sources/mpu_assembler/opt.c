@@ -6,6 +6,9 @@
 #include <string.h>
 #include "opt.h"
 
+// Fichier de sortie
+FILE* file_out = NULL;
+
 // Sauvegarde de l'entrée standard
 int stdin_fd = 0;
 
@@ -18,10 +21,17 @@ FILE *stdin_terminal = NULL;
 void do_options(int argc, char **argv) {
   int c;
 
-  while ((c = getopt (argc, argv, "v")) != -1) {
+  while ((c = getopt (argc, argv, "vo:")) != -1) {
     switch (c) {
     case 'v':
       mode_verbose = 1;
+      break;
+    case 'o':
+      file_out = fopen(optarg, "w");
+      if (file_out == NULL) {
+        perror("Error while creating output file");
+        exit(1);
+      }
       break;
     case '?':
       if (optopt == 'o') {
@@ -34,6 +44,15 @@ void do_options(int argc, char **argv) {
       exit(1);
     default:
       abort ();
+    }
+  }
+
+  // Pas de fichier donné : fichier par défaut "a.out"
+  if (file_out == NULL) {
+    file_out = fopen("a.out", "w");
+    if (file_out == NULL) {
+      perror("Error while creating output file");
+      exit(1);
     }
   }
 
@@ -67,4 +86,6 @@ void close_files() {
   dup(stdin_fd);
   // Libération du descripteur de sauvegarde de l'entrée standard
   close(stdin_fd);
+  // Fermeture du fichier de sortie de compilation
+  fclose(file_out);
 }

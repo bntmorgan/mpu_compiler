@@ -13,6 +13,16 @@ enum OP_SIZE {
   QWORD
 };
 
+enum OP_CODE {
+  OP_MASK = 1,
+  OP_EQU = 2,
+  OP_INF = 3,
+  OP_INT = 4,
+  OP_MLOAD = 5,
+  OP_LOAD = 6,
+  OP_JMP = 7
+};
+
 void sem_mask(int size, t_reg *op1, t_reg *op2, t_reg *op3, t_reg *op4);
 void sem_equ(int size, t_reg *op1, t_reg *op2, t_reg *op3, t_reg *op4);
 void sem_inf(int size, t_reg *op1, t_reg *op2, t_reg *op3); 
@@ -26,5 +36,7 @@ void assert_reg_size_sel(int size, t_reg *op);
 void assert_size_int(int size, int op);
 void assert_size(int size);
 void sem_error(void);
+
+void compile(const char *format, ...);
 
 #endif//__SEM_H__

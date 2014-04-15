@@ -12,5 +12,6 @@ void yyerror(const char *s) {
 int main(int argc, char *argv[]) {
   do_options(argc, argv);
   yyparse();
+  close_files();
   return 0;
 }
