@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "sem.h"
 #include "parser.h"
 
 extern int line;
