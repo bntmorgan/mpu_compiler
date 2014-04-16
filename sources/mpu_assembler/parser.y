@@ -30,31 +30,106 @@ instructions  : instruction instructions;
               | ;
 
 instruction : tMASK  size reg tC reg tC reg tC reg {
-  sem_mask($2, &$3, &$5, &$7, &$9);
+  t_inst i = {
+    .opcode = {
+      .op = OP_MASK,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1 = $5,
+    .op2 = $7,
+    .op3 = $9
+  };
+  sem_mask(&i);
 }
             | tEQU   size reg tC reg tC reg tC reg {
-  sem_equ($2, &$3, &$5, &$7, &$9);
+  t_inst i = {
+    .opcode = {
+      .op = OP_EQU,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1 = $5,
+    .op2 = $7,
+    .op3 = $9
+  };
+  sem_equ(&i);
 }
             | tINF   size reg tC reg tC reg {
-  sem_inf($2, &$3, &$5, &$7);
+  t_inst i = {
+    .opcode = {
+      .op = OP_INF,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1 = $5,
+    .op2 = $7,
+    .op3.raw = 0
+  };
+  sem_inf(&i);
 }
             | tINT   size reg {
-  sem_int($2, &$3);
+  t_inst i = {
+    .opcode = {
+      .op = OP_INT,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1.raw = 0,
+    .op2.raw = 0,
+    .op3.raw = 0
+  };
+  sem_int(&i);
 }
             | tMLOAD size reg {
-  sem_mload($2, &$3);
+  t_inst i = {
+    .opcode = {
+      .op = OP_MLOAD,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1.raw = 0,
+    .op2.raw = 0,
+    .op3.raw = 0
+  };
+  sem_mload(&i);
 }
             | tLOAD  size reg tC tINTEGER {
-  sem_load($2, &$3, $5);
+  t_inst i = {
+    .opcode = {
+      .op = OP_LOAD,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .imm = $5
+  };
+  sem_load(&i);
 }
             | tJMP   size reg {
-  sem_jmp($2, &$3);
+  t_inst i = {
+    .opcode = {
+      .op = OP_JMP,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1.raw = 0,
+    .op2.raw = 0,
+    .op3.raw = 0
+  };
+  sem_jmp(&i);
 }
 
-size  : tB {$$ = BYTE;}
-      | tW {$$ = WORD;}
-      | tD {$$ = DWORD;}
-      | tQ {$$ = QWORD;}
+size  : tB {$$ = BYTE; csize = BYTE;}
+      | tW {$$ = WORD; csize = WORD;}
+      | tD {$$ = DWORD; csize = DWORD;}
+      | tQ {$$ = QWORD; csize = QWORD;}
 
 reg : tREG tINTEGER {
   $$ = sem_reg($2, 0);

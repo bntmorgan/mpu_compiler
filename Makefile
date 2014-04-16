@@ -39,6 +39,11 @@ targets: $(TARGETS)
 	@echo [LD] $@
 	@$(LD) -o $@ $^ $(TARGET_LDFLAGS)
 
+%.so:
+	@mkdir -p $(dir $@)
+	@echo [LD] $@
+	@$(LD) -shared -o $@ $^ $(TARGET_LDFLAGS)
+
 build/%.o: build/%.c
 	@mkdir -p $(dir $@)
 	@echo [CC] $@

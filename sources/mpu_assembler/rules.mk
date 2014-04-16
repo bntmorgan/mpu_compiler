@@ -13,10 +13,11 @@ $(call SRC_2_OBJ, $(d)/lexer.o): $(call SRC_2_OBJ, $(d)/parser.o)
 
 OBJECTS 				+= $(OBJS_$(d))
 
-$(OBJS_$(d))		:  OBJ_CFLAGS	:= -I$(d) -I$(call SRC_2_OBJ, $(d))
+$(OBJS_$(d))		:  OBJ_CFLAGS	:= -I$(d) -I$(call SRC_2_OBJ, $(d)) \
+	-Isources/includes
 
 $(TARGET)				:  TARGET_LDFLAGS	:= -ly -lfl
-$(TARGET)				:  $(OBJS_$(d))
+$(TARGET)				:  $(OBJS_$(d)) binary/mpu_lib/mpu_lib.so
 
 d               := $(dirstack_$(sp))
 sp              := $(basename $(sp))
