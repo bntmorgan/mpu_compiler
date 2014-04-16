@@ -47,7 +47,7 @@ t_reg sem_reg(int reg, int sel) {
     .reg = reg,
     .sel = sel
   };
-  assert_reg_size_sel(csize, reg, sel);
+  mpu_assert_reg_size_sel(csize, reg, sel);
   return r;
 }
 
@@ -55,7 +55,7 @@ t_reg sem_reg(int reg, int sel) {
  * Compilation
  */
 void compile(t_inst *i) {
-  if (fwrite(i, isize(i), 1, file_out) <= 0) {
+  if (fwrite(i, mpu_isize(i), 1, file_out) <= 0) {
     log_error("Failed to compile");
     error();
   }

@@ -8,7 +8,7 @@
 WHITESPACE [ \t]
 WORD [a-zA-Z0-9_]+
 HEXA_INTEGER 0x[0-9a-fA-F]+
-DEC_INTEGER [0-9]+(e-?[0-9]+)?
+DEC_INTEGER [0-9]+
 INTEGER {HEXA_INTEGER}|{DEC_INTEGER}
 
 %x COMMENT
@@ -37,7 +37,7 @@ _ {return tREGSEP;}
 [qQ] {return tQ;}
 [,] {return tC;}
 
-{INTEGER} {yylval.integer = atoi(yytext); return tINTEGER;}
+{INTEGER} {yylval.integer = strtol(yytext, NULL, 0); return tINTEGER;}
 {WHITESPACE} {}
 \n {line++;}
 . {return tERROR;}

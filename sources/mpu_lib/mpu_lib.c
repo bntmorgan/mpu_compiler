@@ -2,7 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-int disassemble (FILE *in, t_inst *instructions, ssize_t *size) {
+char *mnemonics[16] = {
+  "",
+  "mask",
+  "equ",
+  "inf",
+  "int",
+  "mload",
+  "load",
+  "jmp",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+};
+
+char *sizes[4] = {
+  "b",
+  "w",
+  "d",
+  "q"
+};
+
+int mpu_disassemble (FILE *in, t_inst *instructions, ssize_t *size) {
   // int offset = 0;
   int r;
   uint8_t is;
@@ -10,24 +36,63 @@ int disassemble (FILE *in, t_inst *instructions, ssize_t *size) {
 
   // Lets go baby
   while (1) {
+    memset(&i, 0, sizeof(t_inst));
     r = fread(&i, sizeof(t_opcode), 1, in);
     if (r <= 0) {
       // This is the end, the correct end YOLORD
       return 0;
     }
-    assert_opcode(&i);
-    is = isize(&i);
+    mpu_assert_opcode(&i);
+    is = mpu_isize(&i);
     r = fread(((uint8_t*)&i) + sizeof(t_opcode), is - sizeof(t_opcode), 1, in); 
     if (r <= 0) {
       fprintf(stderr, "[ERROR] Failed to read input file :(\n");
       return 1;
     }
+    // Test the fields
+    // TODO but we use our compiler so it is ok
+    // print the decoded intruction for debug purpose
+    mpu_ifprintf(&i, stdout);
   }
 
   return 0;
 }
 
-uint8_t isize (t_inst *i) {
+void mpu_ifprintf(t_inst *i, FILE *out) {
+  fprintf(out, "%s%s ", mnemonics[i->opcode.op], sizes[i->opcode.size]);
+  if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
+      OP_INF || i->opcode.op == OP_LOAD){
+    mpu_regfprintf(&i->op0, out, 0);
+  } else {
+    mpu_regfprintf(&i->op0, out, 1);
+  }
+  if (i->opcode.op == OP_LOAD) {
+    fprintf(out, "0x%x", i->imm);
+  } else {
+    if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
+        OP_INF) {
+      mpu_regfprintf(&i->op1, out, 0);
+      mpu_regfprintf(&i->op2, out, 0);
+    }
+    if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU) {
+      mpu_regfprintf(&i->op3, out, 1);
+    }
+  }
+  fprintf(out, "\n");
+}
+
+void mpu_regfprintf(t_reg *r, FILE *out, int last) {
+  if (!r->sel) {
+    fprintf(out, "r%d", r->reg);
+  } else {
+    fprintf(out, "r%d_%d", r->reg, r->sel);
+  }
+  if (!last) {
+    fprintf(out, ", ");
+  }
+}
+
+uint8_t mpu_isize (t_inst *i) {
   switch (i->opcode.op) {
   case OP_MASK:
     return SIZE_MASK;
@@ -54,7 +119,7 @@ uint8_t isize (t_inst *i) {
  * Semantics
  */
 
-void assert_reg_size_sel(uint32_t size, uint32_t  reg, uint32_t sel) {
+void mpu_assert_reg_size_sel(uint32_t size, uint32_t  reg, uint32_t sel) {
   assertf(reg >= 0 && reg <= 31, "GPR number out of bounds");
   switch (size) {
     case BYTE:
@@ -75,7 +140,7 @@ void assert_reg_size_sel(uint32_t size, uint32_t  reg, uint32_t sel) {
   }
 }
 
-void assert_size_int(t_inst *i, int op) {
+void mpu_assert_size_int(t_inst *i, int op) {
   unsigned int o = (unsigned int)op;
   switch (i->opcode.size) {
     case BYTE:
@@ -96,7 +161,7 @@ void assert_size_int(t_inst *i, int op) {
   }
 }
 
-void assert_opcode(t_inst *i) {
+void mpu_assert_opcode(t_inst *i) {
   assertf(i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
       OP_INF || i->opcode.op == OP_INT || i->opcode.op == OP_MLOAD ||
       i->opcode.op == OP_LOAD || i->opcode.op == OP_JMP, "Bad i->opcode.op \

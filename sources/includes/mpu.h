@@ -74,11 +74,13 @@ typedef struct _t_inst {
   };
 } __attribute__((packed)) t_inst;
 
-int disassemble (FILE *in, t_inst *instructions, ssize_t *size);
-uint8_t isize (t_inst *i);
+int mpu_disassemble (FILE *in, t_inst *instructions, ssize_t *size);
+uint8_t mpu_isize (t_inst *i);
 
-void assert_reg_size_sel(uint32_t size, uint32_t  reg, uint32_t sel);
-void assert_size_int(t_inst *i, int op);
-void assert_opcode(t_inst *i);
+void mpu_assert_reg_size_sel(uint32_t size, uint32_t  reg, uint32_t sel);
+void mpu_assert_size_int(t_inst *i, int op);
+void mpu_assert_opcode(t_inst *i);
+void mpu_ifprintf(t_inst *i, FILE *out);
+void mpu_regfprintf(t_reg *r, FILE *out, int last);
 
 #endif//__MPU_H__
