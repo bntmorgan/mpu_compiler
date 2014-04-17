@@ -1,6 +1,7 @@
-#include "mpu.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "mpu.h"
 
 #define MPU_SIZE_BASE 0x10
 
@@ -48,6 +49,14 @@ int isizes[16] = {
   0,
   0
 };
+
+int mpu_pow(int x, int y) {
+  int i, res = x;
+  for (i = 0; i < y; i++) {
+    res *= x;
+  }
+  return res;
+}
 
 /**
  * Adds to a dyn table
@@ -115,6 +124,7 @@ int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
       fprintf(stderr, "[ERROR] Failed to read input file :(\n");
       return 1;
     }
+    // TODO test the operands ?
     tr += is;
     // Copying the instruction
     l_inst[l_inst_idx] = i;
@@ -187,7 +197,7 @@ void mpu_regfprintf(t_reg *r, FILE *out, int last) {
 uint8_t mpu_isize (t_inst *i) {
   uint8_t s = isizes[i->opcode.op];
   if (i->opcode.op == OP_LOAD) {
-    s += i->opcode.size + 1;
+    s += (uint8_t)mpu_pow(2, i->opcode.size);
   }
   return s;
 }
