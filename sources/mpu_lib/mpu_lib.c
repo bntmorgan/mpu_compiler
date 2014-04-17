@@ -30,6 +30,25 @@ char *sizes[4] = {
   "q"
 };
 
+int isizes[16] = {
+  0,
+  5,
+  5,
+  4,
+  2,
+  2,
+  2,
+  2,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+};
+
 /**
  * Adds to a dyn table
  * idx : current idx,
@@ -162,26 +181,11 @@ void mpu_regfprintf(t_reg *r, FILE *out, int last) {
 }
 
 uint8_t mpu_isize (t_inst *i) {
-  switch (i->opcode.op) {
-  case OP_MASK:
-    return SIZE_MASK;
-  case OP_EQU:
-    return SIZE_EQU;
-  case OP_INF:
-    return SIZE_INF;
-  case OP_INT:
-    return SIZE_INT;
-  case OP_MLOAD:
-    return SIZE_MLOAD;
-  case OP_LOAD:
-    return SIZE_LOAD_BASE + i->opcode.size + 1;
-  case OP_JMP:
-    return SIZE_JMP;
-  default:
-    ;
-    // Error
+  uint8_t s = isizes[i->opcode.op];
+  if (i->opcode.op == OP_LOAD) {
+    s += i->opcode.size + 1;
   }
-  return 0;
+  return s;
 }
 
 /**

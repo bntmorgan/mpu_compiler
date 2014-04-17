@@ -30,16 +30,6 @@ enum OP_CODE {
   OP_JMP = 7
 };
 
-enum ISIZE {
-  SIZE_MASK = 5,
-  SIZE_EQU = 5,
-  SIZE_INF = 4,
-  SIZE_INT = 2,
-  SIZE_MLOAD = 2,
-  SIZE_LOAD_BASE = 2,
-  SIZE_JMP = 2
-};
-
 typedef struct _t_reg {
   union {
     struct {
