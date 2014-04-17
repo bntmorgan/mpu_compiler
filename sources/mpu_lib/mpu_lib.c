@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MPU_SIZE_BASE 0x10
+
 char *mnemonics[16] = {
   "",
   "mask",
@@ -28,19 +30,62 @@ char *sizes[4] = {
   "q"
 };
 
-int mpu_disassemble (FILE *in, t_inst *instructions, ssize_t *size) {
-  // int offset = 0;
-  int r;
+/**
+ * Adds to a dyn table
+ * idx : current idx,
+ * size : size of one element,
+ * nmemb : total size in number of elements
+ */
+int mpu_table_inc (uint8_t **t, size_t *idx, size_t size, size_t *nmemb) {
+  if (*nmemb == 0) {
+    *nmemb = MPU_SIZE_BASE;
+    // printf("Allocating %lu bytes\n", size * *nmemb);
+    *t = malloc(size * *nmemb);
+    if (*t == NULL) {
+      perror("Error allocating memory");
+      return 1;
+    }
+  } else if (*idx >= *nmemb) {
+    *nmemb *= 2;
+    // printf("Reallocating %lu bytes\n", size * *nmemb);
+    *t = realloc(*t, size * *nmemb);
+    if (*t == NULL) {
+      perror("Error allocating memory");
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
+    **addr_to_idx, size_t *inst_len) {
+  uint32_t r, tr, off = 0;
   uint8_t is;
   t_inst i;
+  // Dyn tables
+  size_t l_inst_nmemb = 0;
+  size_t l_inst_idx = 0;
+  t_inst *l_inst = NULL;
+  size_t l_idx_nmemb = 0;
+  size_t l_idx_idx = 0;
+  int *l_idx = NULL;
+  size_t l_ridx_nmemb = 0;
+  size_t l_ridx_idx = 0;
+  int *l_ridx = NULL;
+
+  // Allocate for the first time
+  mpu_table_inc((uint8_t **)&l_inst, &l_inst_idx, sizeof(t_inst), &l_inst_nmemb);
+  mpu_table_inc((uint8_t **)&l_idx, &l_idx_idx, sizeof(t_inst), &l_idx_nmemb);
+  mpu_table_inc((uint8_t **)&l_ridx, &l_ridx_idx, sizeof(t_inst), &l_ridx_nmemb);
 
   // Lets go baby
   while (1) {
+    tr = 0;
     memset(&i, 0, sizeof(t_inst));
     r = fread(&i, sizeof(t_opcode), 1, in);
     if (r <= 0) {
       // This is the end, the correct end YOLORD
-      return 0;
+      break;
     }
     mpu_assert_opcode(&i);
     is = mpu_isize(&i);
@@ -49,12 +94,35 @@ int mpu_disassemble (FILE *in, t_inst *instructions, ssize_t *size) {
       fprintf(stderr, "[ERROR] Failed to read input file :(\n");
       return 1;
     }
-    // Test the fields
-    // TODO but we use our compiler so it is ok
-    // print the decoded intruction for debug purpose
-    mpu_ifprintf(&i, stdout);
+    tr += is;
+    // Copying the instruction
+    l_inst[l_inst_idx] = i;
+    // Idx to addr
+    l_idx[l_idx_idx] = off;
+    // Reverse index
+    l_ridx[off] = l_inst_idx;
+    // Increment idx
+    l_idx_idx++;
+    l_inst_idx++;
+    l_ridx_idx += off + 1;
+    mpu_table_inc((uint8_t **)&l_inst, &l_inst_idx, sizeof(t_inst), &l_inst_nmemb);
+    mpu_table_inc((uint8_t **)&l_idx, &l_idx_idx, sizeof(t_inst), &l_idx_nmemb);
+    mpu_table_inc((uint8_t **)&l_ridx, &l_ridx_idx, sizeof(t_inst), &l_ridx_nmemb);
+    // Incrementing offset
+    off += tr;
   }
 
+  // XXX test
+  int j;
+  for (j = 0; j < l_inst_idx; j++) {
+    fprintf(stdout, "0x%04x: ", l_idx[j]);
+    mpu_ifprintf(&l_inst[j], stdout);
+  }
+
+  *inst = l_inst;
+  *idx_to_addr = l_idx;
+  *inst_len = l_inst_idx;
+  *addr_to_idx = l_ridx;
   return 0;
 }
 
