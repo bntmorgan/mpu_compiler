@@ -93,9 +93,11 @@ int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
   int *l_ridx = NULL;
 
   // Allocate for the first time
-  mpu_table_inc((uint8_t **)&l_inst, &l_inst_idx, sizeof(t_inst), &l_inst_nmemb);
+  mpu_table_inc((uint8_t **)&l_inst, &l_inst_idx, sizeof(t_inst),
+      &l_inst_nmemb);
   mpu_table_inc((uint8_t **)&l_idx, &l_idx_idx, sizeof(t_inst), &l_idx_nmemb);
-  mpu_table_inc((uint8_t **)&l_ridx, &l_ridx_idx, sizeof(t_inst), &l_ridx_nmemb);
+  mpu_table_inc((uint8_t **)&l_ridx, &l_ridx_idx, sizeof(t_inst),
+      &l_ridx_nmemb);
 
   // Lets go baby
   while (1) {
