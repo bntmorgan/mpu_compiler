@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
   size_t inst_len;
   do_options(argc, argv);
   mpu_disassemble(infile, &inst, &idx_to_addr, &addr_to_idx, &inst_len);
+  mpu_print_program(inst, idx_to_addr, inst_len);
   close_files();
   return 0;
 }

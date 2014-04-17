@@ -76,6 +76,7 @@ typedef struct _t_inst {
 
 int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
     **addr_to_idx, size_t *inst_len);
+void mpu_print_program(t_inst *inst, int *idx_to_addr, size_t inst_len);
 uint8_t mpu_isize (t_inst *i);
 
 void mpu_assert_reg_size_sel(uint32_t size, uint32_t  reg, uint32_t sel);

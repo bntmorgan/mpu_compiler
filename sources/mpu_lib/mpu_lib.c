@@ -112,18 +112,19 @@ int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
     off += tr;
   }
 
-  // XXX test
-  int j;
-  for (j = 0; j < l_inst_idx; j++) {
-    fprintf(stdout, "0x%04x: ", l_idx[j]);
-    mpu_ifprintf(&l_inst[j], stdout);
-  }
-
   *inst = l_inst;
   *idx_to_addr = l_idx;
   *inst_len = l_inst_idx;
   *addr_to_idx = l_ridx;
   return 0;
+}
+
+void mpu_print_program(t_inst *inst, int *idx_to_addr, size_t inst_len) {
+  int i;
+  for (i = 0; i < inst_len; i++) {
+    fprintf(stdout, "0x%04x: ", idx_to_addr[i]);
+    mpu_ifprintf(&inst[i], stdout);
+  }
 }
 
 void mpu_ifprintf(t_inst *i, FILE *out) {
