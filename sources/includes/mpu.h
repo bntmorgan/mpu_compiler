@@ -24,10 +24,10 @@ enum OP_CODE {
   OP_MASK = 1,
   OP_EQU = 2,
   OP_INF = 3,
-  OP_INT = 4,
-  OP_MLOAD = 5,
-  OP_LOAD = 6,
-  OP_JMP = 7
+  OP_INT = 12,
+  OP_MLOAD = 13,
+  OP_LOAD = 14,
+  OP_JMP = 15
 };
 
 typedef struct _t_reg {

@@ -20,6 +20,7 @@ YFLAGS=-v -d
 LD=gcc
 LEX=lex
 YACC=yacc
+TFTPY = ../tftpy
 
 ################################## INCLUDES ####################################
 
@@ -78,3 +79,8 @@ mr-proper: mr-proper-vim clean
 mr-proper-vim:
 	@echo [CLR] *.swp
 	@find . | grep .swp | xargs rm -f
+
+sample: targets sample/dumber.s
+	@echo [MCC] dumber.bin -o  $(TFTPY)/root/mpu.bin
+	@./binary/mpu_assembler/mpu_assembler.elf -o $(TFTPY)/root/mpu.bin \
+		sample/dumber.s

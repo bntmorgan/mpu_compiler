@@ -10,18 +10,18 @@ char *mnemonics[16] = {
   "mask",
   "equ",
   "inf",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
   "int",
   "mload",
   "load",
-  "jmp",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
+  "jmp"
 };
 
 char *sizes[4] = {
@@ -36,24 +36,28 @@ int isizes[16] = {
   5,
   5,
   4,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
   2,
   2,
   2,
-  2,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0
+  2
 };
 
 int mpu_pow(int x, int y) {
   int i, res = x;
-  for (i = 0; i < y; i++) {
-    res *= x;
+  if (y == 0) {
+    res = 1;
+  } else {
+    for (i = 0; i < y - 1; i++) {
+      res *= x;
+    }
   }
   return res;
 }
