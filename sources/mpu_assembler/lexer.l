@@ -22,6 +22,7 @@ INTEGER {HEXA_INTEGER}|{DEC_INTEGER}
 <COMMENT>[.]* {}
 <COMMENT>"*/" {BEGIN INITIAL;printf("\n");}
 
+"//".*\n {}
 (MASK|mask) {return tMASK;}
 (EQU|equ) {return tEQU;}
 (INF|inf) {return tINF;}

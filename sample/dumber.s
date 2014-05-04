@@ -1,38 +1,10 @@
-loadb r0, 0x0
-loadd r0, 0x0
-loadd r1, 0x12345678
-loadd r1_1, 0x12345678
-loadw r2_0, 0x5678
-loadw r2_1, 0x1234
-loadw r2_2, 0x5678
-loadw r2_3, 0x1234
-loadd r0, 0x0
-loadd r1, 0x12345678
-loadd r1_1, 0x12345678
-loadw r2_0, 0x5678
-loadw r2_1, 0x1234
-loadw r2_2, 0x5678
-loadw r2_3, 0x1234
-loadd r0, 0x0
-loadd r1, 0x12345678
-loadd r1_1, 0x12345678
-loadw r2_0, 0x5678
-loadw r2_1, 0x1234
-loadw r2_2, 0x5678
-loadw r2_3, 0x1234
-loadd r0, 0x0
-loadd r1, 0x12345678
-loadd r1_1, 0x12345678
-loadw r2_0, 0x5678
-loadw r2_1, 0x1234
-loadw r2_2, 0x5678
-loadw r2_3, 0x1234
-loadd r0, 0x0
-loadd r1, 0x12345678
-loadd r1_1, 0x12345678
-loadw r2_0, 0x5678
-loadw r2_1, 0x1234
-loadw r2_2, 0x5678
-loadw r2_3, 0x1234
-intq  r0
-
+loadb r31, 0x31
+loadb r30, 0x30
+loadb r29, 0x29
+intq r31
+intq r30
+intq r29
+intq r29
+intq r30
+intq r31
+intq r0

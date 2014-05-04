@@ -72,7 +72,7 @@ info:
 clean:
 	@echo [CLR] $(TARGETS)
 	@echo [CLR] $(OBJECTS)
-	@rm -fr $(dir $(TARGETS)) $(OBJECTS)
+	@rm -fr $(dir $(TARGETS)) $(OBJECTS) sample/*.bin
 
 mr-proper: mr-proper-vim clean
 
