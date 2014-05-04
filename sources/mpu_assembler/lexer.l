@@ -26,6 +26,7 @@ INTEGER {HEXA_INTEGER}|{DEC_INTEGER}
 (MASK|mask) {return tMASK;}
 (EQU|equ) {return tEQU;}
 (INF|inf) {return tINF;}
+(ADD|add) {return tADD;}
 (INT|int) {return tINT;}
 (MLOAD|mload) {return tMLOAD;}
 (LOAD|load) {return tLOAD;}

@@ -15,8 +15,8 @@
 };
 
 // Definition des types des tokens
-%token <integer> tINTEGER tERROR tMASK tEQU tINF tINT tMLOAD tLOAD tJMP tREG 
-%token <integer> tREGSEP tB tW tD tQ tC
+%token <integer> tINTEGER tERROR tMASK tEQU tINF tADD tINT tMLOAD tLOAD tJMP 
+%token <integer> tREG tREGSEP tB tW tD tQ tC
 
 %type <reg> reg
 %type <integer> size
@@ -61,6 +61,20 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
   t_inst i = {
     .opcode = {
       .op = OP_INF,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1 = $5,
+    .op2 = $7,
+    .op3.raw = 0
+  };
+  sem_inf(&i);
+}
+            | tADD   size reg tC reg tC reg {
+  t_inst i = {
+    .opcode = {
+      .op = OP_ADD,
       .sop = 0,
       .size = $2
     },

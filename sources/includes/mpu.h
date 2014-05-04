@@ -24,6 +24,7 @@ enum OP_CODE {
   OP_MASK = 1,
   OP_EQU = 2,
   OP_INF = 3,
+  OP_ADD = 4,
   OP_INT = 12,
   OP_MLOAD = 13,
   OP_LOAD = 14,
