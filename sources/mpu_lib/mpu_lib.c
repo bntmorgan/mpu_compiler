@@ -68,20 +68,20 @@ int mpu_pow(int x, int y) {
  * size : size of one element,
  * nmemb : total size in number of elements
  */
-int mpu_table_inc (uint8_t **t, size_t *idx, size_t size, size_t *nmemb) {
-  if (*nmemb == 0) {
-    *nmemb = MPU_SIZE_BASE;
+int mpu_table_inc (t_table *t) {
+  if (t->nmemb == 0) {
+    t->nmemb = MPU_SIZE_BASE;
     // printf("Allocating %lu bytes\n", size * *nmemb);
-    *t = malloc(size * *nmemb);
-    if (*t == NULL) {
+    t->t = malloc(t->size * t->nmemb);
+    if (t == NULL) {
       perror("Error allocating memory");
       return 1;
     }
-  } else if (*idx >= *nmemb) {
-    *nmemb *= 2;
+  } else if (t->idx >= t->nmemb) {
+    t->nmemb *= 2;
     // printf("Reallocating %lu bytes\n", size * *nmemb);
-    *t = realloc(*t, size * *nmemb);
-    if (*t == NULL) {
+    t->t = realloc(t->t, t->size * t->nmemb);
+    if (t->t == NULL) {
       perror("Error allocating memory");
       return 1;
     }
@@ -89,28 +89,20 @@ int mpu_table_inc (uint8_t **t, size_t *idx, size_t size, size_t *nmemb) {
   return 0;
 }
 
-int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
-    **addr_to_idx, size_t *inst_len) {
+void mpu_table_init(t_table *t, size_t size) {
+  t->nmemb = 0;
+  t->idx = 0;
+  t->size = size;
+  t->t = NULL;
+
+  // Allocate for the first time
+  mpu_table_inc(t);
+}
+
+int mpu_disassemble (FILE *in, t_table *inst, t_table *idx, t_table *ridx) {
   uint32_t r, tr, off = 0;
   uint8_t is;
   t_inst i;
-  // Dyn tables
-  size_t l_inst_nmemb = 0;
-  size_t l_inst_idx = 0;
-  t_inst *l_inst = NULL;
-  size_t l_idx_nmemb = 0;
-  size_t l_idx_idx = 0;
-  int *l_idx = NULL;
-  size_t l_ridx_nmemb = 0;
-  size_t l_ridx_idx = 0;
-  int *l_ridx = NULL;
-
-  // Allocate for the first time
-  mpu_table_inc((uint8_t **)&l_inst, &l_inst_idx, sizeof(t_inst),
-      &l_inst_nmemb);
-  mpu_table_inc((uint8_t **)&l_idx, &l_idx_idx, sizeof(t_inst), &l_idx_nmemb);
-  mpu_table_inc((uint8_t **)&l_ridx, &l_ridx_idx, sizeof(t_inst),
-      &l_ridx_nmemb);
 
   // Lets go baby
   while (1) {
@@ -131,28 +123,22 @@ int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
     // TODO test the operands ?
     tr += is;
     // Copying the instruction
-    l_inst[l_inst_idx] = i;
+    table_get(inst, t_inst *) = i;
     // Idx to addr
-    l_idx[l_idx_idx] = off;
+    table_get(idx, int *) = off;
     // Reverse index
-    l_ridx[off] = l_inst_idx;
+    table_get(ridx, int *) = table_get(idx, int *);
     // Increment idx
-    l_idx_idx++;
-    l_inst_idx++;
-    l_ridx_idx += off + 1;
-    mpu_table_inc((uint8_t **)&l_inst, &l_inst_idx, sizeof(t_inst),
-        &l_inst_nmemb);
-    mpu_table_inc((uint8_t **)&l_idx, &l_idx_idx, sizeof(t_inst), &l_idx_nmemb);
-    mpu_table_inc((uint8_t **)&l_ridx, &l_ridx_idx, sizeof(t_inst),
-        &l_ridx_nmemb);
+    idx->idx++;
+    inst->idx++;
+    ridx->idx += off + 1;
+    mpu_table_inc(inst);
+    mpu_table_inc(idx);
+    mpu_table_inc(ridx);
     // Incrementing offset
     off += tr;
   }
 
-  *inst = l_inst;
-  *idx_to_addr = l_idx;
-  *inst_len = l_inst_idx;
-  *addr_to_idx = l_ridx;
   return 0;
 }
 

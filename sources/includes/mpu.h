@@ -31,6 +31,15 @@ enum OP_CODE {
   OP_JMP = 15
 };
 
+typedef struct _t_table {
+  size_t nmemb; // Number of elements of size size
+  size_t idx; // current used size in nmemb
+  size_t size; // Size of one element
+  void *t; // table pointer
+} t_table;
+
+#define table_get(table,type) ((type)(table->t))[table->idx]
+
 typedef struct _t_reg {
   union {
     struct {
@@ -65,8 +74,7 @@ typedef struct _t_inst {
   };
 } __attribute__((packed)) t_inst;
 
-int mpu_disassemble (FILE *in, t_inst **inst, int **idx_to_addr, int
-    **addr_to_idx, size_t *inst_len);
+int mpu_disassemble (FILE *in, t_table *inst, t_table *idx, t_table *ridx);
 void mpu_print_program(t_inst *inst, int *idx_to_addr, size_t inst_len);
 uint8_t mpu_isize (t_inst *i);
 
@@ -75,5 +83,8 @@ void mpu_assert_size_int(t_inst *i, int op);
 void mpu_assert_opcode(t_inst *i);
 void mpu_ifprintf(t_inst *i, FILE *out);
 void mpu_regfprintf(t_reg *r, FILE *out, int last);
+
+int mpu_table_inc (t_table *t);
+void mpu_table_init(t_table *t, size_t size);
 
 #endif//__MPU_H__
