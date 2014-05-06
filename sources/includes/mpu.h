@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <string.h>
 
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
 #define log_error(M, ...) {fprintf(stderr, "[ERROR] (%s:%d: errno: %s) " M "\n" \
@@ -31,14 +32,17 @@ enum OP_CODE {
   OP_JMP = 15
 };
 
+extern int isizes[16];
+
 typedef struct _t_table {
-  size_t nmemb; // Number of elements of size size
+  size_t nmemb; // Total number of elements of size size allocated
   size_t idx; // current used size in nmemb
   size_t size; // Size of one element
   void *t; // table pointer
 } t_table;
 
-#define table_get(table,type) ((type)(table->t))[table->idx]
+#define table_get(table, type) ((type *)((table)->t))[(table)->idx]
+#define table_get_idx(table, type, idx) ((type *)((table)->t))[idx]
 
 typedef struct _t_reg {
   union {
@@ -70,8 +74,13 @@ typedef struct _t_inst {
       t_reg op2;
       t_reg op3;
     };
-    uint32_t imm;
+    union {
+      uint32_t imm;
+      char *sym;
+    };
   };
+  // Metadata
+  uint8_t is_sym;
 } __attribute__((packed)) t_inst;
 
 int mpu_disassemble (FILE *in, t_table *inst, t_table *idx, t_table *ridx);
@@ -86,5 +95,7 @@ void mpu_regfprintf(t_reg *r, FILE *out, int last);
 
 int mpu_table_inc (t_table *t);
 void mpu_table_init(t_table *t, size_t size);
+
+int mpu_pow(int x, int y);
 
 #endif//__MPU_H__

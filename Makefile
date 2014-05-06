@@ -81,6 +81,6 @@ mr-proper-vim:
 	@find . | grep .swp | xargs rm -f
 
 sample: targets sample/dumber.s
-	@echo [MCC] dumber.bin -o  $(TFTPY)/root/mpu.bin
+	@echo [MAS] dumber.bin -o  $(TFTPY)/root/mpu.bin
 	@./binary/mpu_assembler/mpu_assembler.elf -o $(TFTPY)/root/mpu.bin \
 		sample/dumber.s

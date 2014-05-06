@@ -12,11 +12,13 @@
 %union {
   int integer;
   t_reg reg;
+  char *string;
 };
 
 // Definition des types des tokens
 %token <integer> tINTEGER tERROR tMASK tEQU tINF tADD tINT tMLOAD tLOAD tJMP 
 %token <integer> tREG tREGSEP tB tW tD tQ tC
+%token <string> tULABEL tDLABEL
 
 %type <reg> reg
 %type <integer> size
@@ -121,7 +123,21 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
       .size = $2
     },
     .op0 = $3,
-    .imm = $5
+    .imm = $5,
+    .is_sym = 0
+  };
+  sem_load(&i);
+}
+            | tLOAD  size reg tC tULABEL {
+  t_inst i = {
+    .opcode = {
+      .op = OP_LOAD,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .sym = $5,
+    .is_sym = 1
   };
   sem_load(&i);
 }
@@ -138,6 +154,9 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
     .op3.raw = 0
   };
   sem_jmp(&i);
+}
+            | tDLABEL {
+  sem_label($1);
 }
 
 size  : tB {$$ = BYTE; csize = BYTE;}

@@ -123,11 +123,11 @@ int mpu_disassemble (FILE *in, t_table *inst, t_table *idx, t_table *ridx) {
     // TODO test the operands ?
     tr += is;
     // Copying the instruction
-    table_get(inst, t_inst *) = i;
+    table_get(inst, t_inst) = i;
     // Idx to addr
-    table_get(idx, int *) = off;
+    table_get(idx, int) = off;
     // Reverse index
-    table_get(ridx, int *) = table_get(idx, int *);
+    table_get(ridx, int) = table_get(idx, int);
     // Increment idx
     idx->idx++;
     inst->idx++;
@@ -244,5 +244,5 @@ void mpu_assert_opcode(t_inst *i) {
   assertf(i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
       OP_INF || i->opcode.op == OP_ADD || i->opcode.op == OP_INT || i->opcode.op
       == OP_MLOAD || i->opcode.op == OP_LOAD || i->opcode.op == OP_JMP, 
-      "Bad i->opcode.op code");
+      "Bad opcode 0x%02x", i->opcode.op);
 }
