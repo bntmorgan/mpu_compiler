@@ -101,7 +101,7 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
   };
   sem_int(&i);
 }
-            | tMLOAD size reg {
+            | tMLOAD size reg tC reg {
   t_inst i = {
     .opcode = {
       .op = OP_MLOAD,
@@ -109,7 +109,7 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
       .size = $2
     },
     .op0 = $3,
-    .op1.raw = 0,
+    .op1 = $5,
     .op2.raw = 0,
     .op3.raw = 0
   };
