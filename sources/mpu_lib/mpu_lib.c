@@ -159,7 +159,7 @@ void mpu_ifprintf(t_inst *i, FILE *out) {
     mpu_regfprintf(&i->op0, out, 1);
   }
   if (i->opcode.op == OP_LOAD) {
-    fprintf(out, "0x%x", i->imm);
+    fprintf(out, "$0x%x", i->imm);
   } else {
     if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU) {
       mpu_regfprintf(&i->op1, out, 0);

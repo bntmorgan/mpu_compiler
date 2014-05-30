@@ -17,7 +17,7 @@
 
 // Definition des types des tokens
 %token <integer> tINTEGER tERROR tMASK tEQU tINF tADD tINT tMLOAD tLOAD tJMP 
-%token <integer> tREG tREGSEP tB tW tD tQ tC
+%token <integer> tREG tREGSEP tB tW tD tQ tC tDOLLAR
 %token <string> tULABEL tDLABEL
 
 %type <reg> reg

@@ -1,9 +1,9 @@
-  loadd r31, 0x1000000 // max
-  loadb r30, 0x1 // Increment
-  loadb r29, 0x0 // cpt a
-  loadb r28, 0x0 // cpt b
-  loadb r0, 0xff // a
-  loadb r1, 0xff // a
+  loadd r31, $0x1000000 // max
+  loadb r30, $0x1 // Increment
+  loadb r29, $0x0 // cpt a
+  loadb r28, $0x0 // cpt b
+  loadb r0, $0xff // a
+  loadb r1, $0xff // a
   loadw r2, $for_a
   loadw r3, $for_a_end
   loadw r4, $for_b
