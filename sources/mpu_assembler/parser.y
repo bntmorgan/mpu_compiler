@@ -17,7 +17,7 @@
 
 // Definition des types des tokens
 %token <integer> tINTEGER tERROR tMASK tEQU tINF tADD tINT tMLOAD tLOAD tJMP 
-%token <integer> tREG tREGSEP tB tW tD tQ tC tDOLLAR
+%token <integer> tREG tREGSEP tB tW tD tQ tC tDOLLAR tIMMEDIATE
 %token <string> tULABEL tDLABEL
 
 %type <reg> reg
@@ -115,7 +115,7 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
   };
   sem_mload(&i);
 }
-            | tLOAD  size reg tC tINTEGER {
+            | tLOAD  size reg tC tIMMEDIATE {
   t_inst i = {
     .opcode = {
       .op = OP_LOAD,
