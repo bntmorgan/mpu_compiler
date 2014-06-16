@@ -1,4 +1,4 @@
-  loadd r31, $0x100 // max
+  loadd r31, $0x1000 // max
   loadb r30, $0x1 // Increment
   loadb r29, $0x0 // cpt a
   loadb r28, $0x0 // cpt b
@@ -12,7 +12,7 @@ for_a:
   // for (i = 0; i < 0x10000; i++)
   infd r29, r31, r3
   // for (j = 0; j < 0x10000; j++)
-  // loadd r28, $0x0
+  loadd r28, $0x0
 for_b:
   infd r28, r31, r5
   equb r0, r1, r1, r3
