@@ -107,6 +107,14 @@ void compile(t_inst *i) {
   }
 }
 
+int pad(void) {
+  uint32_t zero = 0; 
+  int padsize = caddr % 4;
+  printf("PADDING %x\n", padsize);
+  fwrite(&zero, sizeof(char), padsize, file_out);
+  return padsize;
+}
+
 void sem_second_pass() {
   int i;
   sym_print(&t);

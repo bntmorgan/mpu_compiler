@@ -19,6 +19,7 @@ void sem_label(char *l);
 void sem_error(void);
 
 void compile(t_inst *i);
+int pad(void);
 void sem_second_pass();
 
 #endif//__SEM_H__

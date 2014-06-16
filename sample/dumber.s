@@ -1,4 +1,4 @@
-  loadd r31, $0x1000 // max
+  loadd r31, $0x4 // max
   loadb r30, $0x1 // Increment
   loadb r29, $0x0 // cpt a
   loadb r28, $0x0 // cpt b
@@ -15,9 +15,6 @@ for_a:
   loadd r28, $0x0
 for_b:
   infd r28, r31, r5
-  equb r0, r1, r1, r3
-  equb r0, r1, r1, r3
-  equb r0, r1, r1, r3
   equb r0, r1, r1, r3
   addd r28, r30, r28
   jmpw r4
