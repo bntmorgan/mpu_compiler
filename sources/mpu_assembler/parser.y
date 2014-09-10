@@ -17,7 +17,7 @@
 
 // Definition des types des tokens
 %token <integer> tINTEGER tERROR tMASK tEQU tINF tADD tINT tMLOAD tLOAD tJMP 
-%token <integer> tREG tREGSEP tB tW tD tQ tC tDOLLAR tIMMEDIATE
+%token <integer> tREG tREGSEP tB tW tD tQ tC tDOLLAR tIMMEDIATE tHAMM
 %token <string> tULABEL tDLABEL
 
 %type <reg> reg
@@ -86,6 +86,20 @@ instruction : tMASK  size reg tC reg tC reg tC reg {
     .op3.raw = 0
   };
   sem_inf(&i);
+}
+            | tHAMM  size reg tC reg tC reg {
+  t_inst i = {
+    .opcode = {
+      .op = OP_HAMM,
+      .sop = 0,
+      .size = $2
+    },
+    .op0 = $3,
+    .op1 = $5,
+    .op2 = $7,
+    .op3.raw = 0
+  };
+  sem_hamm(&i);
 }
             | tINT   size reg {
   t_inst i = {

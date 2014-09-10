@@ -52,6 +52,14 @@ void sem_inf(t_inst *i) {
   compile(i);
 }
 
+void sem_add(t_inst *i) {
+  compile(i);
+}
+
+void sem_hamm(t_inst *i) {
+  compile(i);
+}
+
 void sem_int(t_inst *i) {
   compile(i);
 }

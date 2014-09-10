@@ -28,6 +28,7 @@ IMMEDIATE [$]{INTEGER}
 (EQU|equ) {return tEQU;}
 (INF|inf) {return tINF;}
 (ADD|add) {return tADD;}
+(HAMM|hamm) {return tHAMM;}
 (INT|int) {return tINT;}
 (MLOAD|mload) {return tMLOAD;}
 (LOAD|load) {return tLOAD;}

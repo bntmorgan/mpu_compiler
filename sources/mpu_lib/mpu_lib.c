@@ -11,7 +11,7 @@ char *mnemonics[16] = {
   "equ",
   "inf",
   "add",
-  "",
+  "hamm",
   "",
   "",
   "",
@@ -37,7 +37,7 @@ int isizes[16] = {
   5,
   4,
   4,
-  0,
+  4,
   0,
   0,
   0,
@@ -153,7 +153,8 @@ void mpu_print_program(t_inst *inst, int *idx_to_addr, size_t inst_len) {
 void mpu_ifprintf(t_inst *i, FILE *out) {
   fprintf(out, "%s%s ", mnemonics[i->opcode.op], sizes[i->opcode.size]);
   if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
-      OP_INF || i->opcode.op == OP_ADD || i->opcode.op == OP_LOAD){
+      OP_INF || i->opcode.op == OP_HAMM || i->opcode.op == OP_ADD ||
+      i->opcode.op == OP_LOAD){
     mpu_regfprintf(&i->op0, out, 0);
   } else {
     mpu_regfprintf(&i->op0, out, 1);
@@ -164,7 +165,8 @@ void mpu_ifprintf(t_inst *i, FILE *out) {
     if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU) {
       mpu_regfprintf(&i->op1, out, 0);
       mpu_regfprintf(&i->op2, out, 0);
-    } else if (i->opcode.op == OP_INF || i->opcode.op == OP_ADD) {
+    } else if (i->opcode.op == OP_INF || i->opcode.op == OP_ADD || i->opcode.op
+        == OP_HAMM) {
       mpu_regfprintf(&i->op1, out, 0);
       mpu_regfprintf(&i->op2, out, 1);
     }
@@ -242,7 +244,8 @@ void mpu_assert_size_int(t_inst *i, int op) {
 
 void mpu_assert_opcode(t_inst *i) {
   assertf(i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
-      OP_INF || i->opcode.op == OP_ADD || i->opcode.op == OP_INT || i->opcode.op
-      == OP_MLOAD || i->opcode.op == OP_LOAD || i->opcode.op == OP_JMP, 
+      OP_INF || i->opcode.op == OP_ADD || i->opcode.op == OP_HAMM ||
+      i->opcode.op == OP_INT || i->opcode.op == OP_MLOAD || i->opcode.op ==
+      OP_LOAD || i->opcode.op == OP_JMP, 
       "Bad opcode 0x%02x", i->opcode.op);
 }

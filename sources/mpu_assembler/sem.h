@@ -9,6 +9,8 @@ void sem_init();
 void sem_mask(t_inst *i);
 void sem_equ(t_inst *i);
 void sem_inf(t_inst *i);
+void sem_add(t_inst *i);
+void sem_hamm(t_inst *i);
 void sem_int(t_inst *i);
 void sem_mload(t_inst *i);
 void sem_load(t_inst *i);
