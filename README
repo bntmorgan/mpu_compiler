@@ -1,0 +1,6 @@
+MPU pattern matchin co-processor assembler
+
+mpu_compiler/
+  MPU assembler source code
+mpu_compiler/sample/
+  Sample algorithms developped to detect memory structures in host memory.
