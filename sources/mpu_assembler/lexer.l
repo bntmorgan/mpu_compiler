@@ -20,7 +20,7 @@ IMMEDIATE [$]{INTEGER}
 
 "/*" {BEGIN COMMENT;}
 <COMMENT>\n {line++;}
-<COMMENT>[.]* {}
+<COMMENT>. {}
 <COMMENT>"*/" {BEGIN INITIAL;printf("\n");}
 
 "//".*\n {}

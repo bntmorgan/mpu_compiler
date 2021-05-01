@@ -37,7 +37,7 @@ int isizes[16] = {
   5,
   4,
   4,
-  4,
+  5,
   0,
   0,
   0,
@@ -162,15 +162,16 @@ void mpu_ifprintf(t_inst *i, FILE *out) {
   if (i->opcode.op == OP_LOAD) {
     fprintf(out, "$0x%x", i->imm);
   } else {
-    if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU) {
+    if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
+        OP_HAMM) {
       mpu_regfprintf(&i->op1, out, 0);
       mpu_regfprintf(&i->op2, out, 0);
-    } else if (i->opcode.op == OP_INF || i->opcode.op == OP_ADD || i->opcode.op
-        == OP_HAMM) {
+    } else if (i->opcode.op == OP_INF || i->opcode.op == OP_ADD) {
       mpu_regfprintf(&i->op1, out, 0);
       mpu_regfprintf(&i->op2, out, 1);
     }
-    if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU) {
+    if (i->opcode.op == OP_MASK || i->opcode.op == OP_EQU || i->opcode.op ==
+        OP_HAMM) {
       mpu_regfprintf(&i->op3, out, 1);
     }
   }
